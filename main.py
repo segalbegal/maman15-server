@@ -1,7 +1,8 @@
+from data.ram_data_holder import RAMDataHolder
 from server import Server
 from client_handler import ClientHandler
-import message_parsers.register_message_parser as register_parser
-import message_handlers.register_message_handler as register_handlers
+from message_parsers.register_message_parser import RegisterMessageParser
+from message_handlers.register_message_handler import RegisterMessageHandler
 import constants
 
 PORT_FILE = 'port.info'
@@ -13,10 +14,11 @@ def read_listening_port() -> int:
 
 def create_handler() -> ClientHandler:
     parsers = {
-        constants.REGISTER_MSGCODE: register_parser.RegisterMessageParser(),
+        constants.REGISTER_MSGCODE: RegisterMessageParser(),
     }
+    data_holder = RAMDataHolder()
     handlers = {
-        constants.REGISTER_MSGCODE: register_handlers.RegisterMessageHandler(),
+        constants.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
     }
     return ClientHandler(parsers, handlers)
 
