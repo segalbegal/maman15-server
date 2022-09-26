@@ -19,7 +19,9 @@ def create_handler() -> ClientHandler:
     parsers = {
         constants.REGISTER_MSGCODE: RegisterMessageParser(),
     }
-    data_holder = DataHolderComposite([RAMDataHolder(), SqliteDataHolder()])
+    sql_data = SqliteDataHolder()
+    clients, files = sql_data.fetch_all_data()
+    data_holder = DataHolderComposite([RAMDataHolder(clients, files), sql_data])
     handlers = {
         constants.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
     }

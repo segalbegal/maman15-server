@@ -2,13 +2,13 @@ import datetime
 from data.data_holder import DataHolder
 
 class RAMDataHolder(DataHolder):
-    def __init__(self):
-        self.clients: dict = {}
-        self.client_names: list = []
-        self.files: list = []
+    def __init__(self, clients: dict={}, files: dict={}):
+        self.clients: dict = clients
+        self.client_names: list = [client['name'] for client in clients.values()]
+        self.files: list = files
 
     def update_last_seen(self, id) -> None:
-        self.clients[id]['last-seen'] = datetime.datetime.now()
+        self.clients[id]['last-seen'] = str(datetime.datetime.now())
 
     def user_exists(self, name: str) -> bool:
         return name in self.client_names
