@@ -1,4 +1,7 @@
 from data.ram_data_holder import RAMDataHolder
+from data.sqlite_data_holder import SqliteDataHolder
+from data.data_holder_composite import DataHolderComposite
+
 from server import Server
 from client_handler import ClientHandler
 from message_parsers.register_message_parser import RegisterMessageParser
@@ -16,7 +19,7 @@ def create_handler() -> ClientHandler:
     parsers = {
         constants.REGISTER_MSGCODE: RegisterMessageParser(),
     }
-    data_holder = RAMDataHolder()
+    data_holder = DataHolderComposite([RAMDataHolder(), SqliteDataHolder()])
     handlers = {
         constants.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
     }

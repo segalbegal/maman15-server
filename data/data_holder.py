@@ -6,7 +6,6 @@ class DataHolder:
         raise NotImplementedError()
 
     def insert_user(self, details: dict) -> None:
-        self.update_last_seen(details['id'])
         raise NotImplementedError()
 
     def update_user(self, details: dict) -> None:

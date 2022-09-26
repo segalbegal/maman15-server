@@ -8,7 +8,7 @@ class RAMDataHolder(DataHolder):
         self.files: list = []
 
     def update_last_seen(self, id) -> None:
-        self.clients[id] = datetime.datetime.now()
+        self.clients[id]['last-seen'] = datetime.datetime.now()
 
     def user_exists(self, name: str) -> bool:
         return name in self.client_names
@@ -16,6 +16,7 @@ class RAMDataHolder(DataHolder):
     def insert_user(self, details: dict) -> None:
         self.client_names.append(details['name'])
         self.clients[details['id']] = details
+        self.update_last_seen(details['id'])
 
     def update_user(self, details: dict) -> None:
         self.clients[details['id']]['public-key'] = details['public-key']
