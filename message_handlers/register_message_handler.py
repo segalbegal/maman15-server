@@ -11,7 +11,7 @@ class RegisterMessageHandler:
     def handle_message(self, message: dict, client_sock: socket) -> None:
         if self.data.user_exists(message['name']):
             RegisterMessageHandler.handle_user_exists(message, client_sock)
-            pass
+            return
 
         message['id'] = uuid.uuid1().bytes
         self.data.insert_user(message)
