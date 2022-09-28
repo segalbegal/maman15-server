@@ -15,8 +15,8 @@ class RegisterMessageHandler:
 
         message['id'] = uuid.uuid1().bytes
         self.data.insert_user(message)
-        su.send_number_to_sock(client_sock, REGISTER_SUCC_STATUS)
-        su.send_bytes_to_sock(client_sock, message['id'])
+
+
 
     def handle_user_exists(message: dict, client_sock: socket):
         padded_name = message['name'].ljust(NAME_LEN, '\x00')
