@@ -1,11 +1,8 @@
 from socket import socket
 from constants import NAME_LEN
 from utilities.socket_utils import SocketUtils as su
-from headers_message_parser import HeaderMessageParser
+from message_parsers.message_parser import MessageParser
 
-class RegisterMessageParser(HeaderMessageParser):
+class RegisterMessageParser(MessageParser):
     def parse_message(self, client_sock: socket) -> dict:
-        headers = super().parse_message(client_sock)
-        headers['name'] = su.read_text_from_socket(client_sock, NAME_LEN)
-
-        return headers
+        return {'name': su.read_text_from_socket(client_sock, NAME_LEN)}

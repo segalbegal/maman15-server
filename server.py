@@ -7,6 +7,7 @@ class Server:
         self.ip: str = ip
         self.port: int = port
         self.client_handler: ClientHandler = client_handler
+        self.running: bool = False
 
     def start(self) -> None:
         listen_sock: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

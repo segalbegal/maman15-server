@@ -1,11 +1,9 @@
-class BytesUtils:
-    def write_number_to_buffer(num: int, len: int) -> bytes:
-        buffer = bytes(len)
-        for i in range(len):
-            buffer[len - i - 1] = num % BYTE_BASE
-            num /= BYTE_BASE
-        return buffer;
+BYTE_BASE: int = 256
 
-    def write_string_to_buffer(sting: str, len: int) -> bytes:
-        str = str.ljust(len)
-        return str.encode('utf-8')
+class BytesUtils:
+    def write_number_to_buffer(num: int, length: int) -> bytes:
+        return num.to_bytes(length, 'big')
+
+    def write_string_to_buffer(string: str, length: int) -> bytes:
+        string = string.ljust(length)
+        return string.encode('utf-8')
