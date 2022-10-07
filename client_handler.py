@@ -1,13 +1,20 @@
-from constants import MSG_CODE_LEN
-from utilities.socket_utils import SocketUtils as su
 import socket
+from message_parsers.message_parser import MessageParser
+from message_handlers.message_handler import MessageHandler
+from response_serializers.response_serializer import ResponseSerializer
 
 class ClientHandler:
-    def __init__(self, parsers: dict, message_handlers: dict) -> None:
-        self.message_parsers: dict = parsers
-        self.message_handlers: dict = message_handlers
+    def __init__(self, parser: MessageParser, message_handler: MessageHandler, response_serializer: ResponseSerializer) -> None:
+        self.message_parser: MessageParser = parser
+        self.message_handler: MessageHandler = message_handler
+        self.response_serializer = response_serializer
 
     def handle_client(self, client_sock: socket.socket) -> None:
-        message_code: int = su.read_number_from_socket(client_sock, MSG_CODE_LEN)
-        parsed_message: dict = self.message_parsers[message_code].parse_message(client_sock)
-        self.message_handlers[message_code].handle_message(parsed_message, client_sock)
+        parsed_message = self.message_parser.parse_message(client_sock)
+        response = self.message_handler.handle_message(parsed_message)
+        serialized_response = self.response_serializer.serialize_response(response)
+
+        print(response)
+        print(serialized_response)
+
+        client_sock.send(serialized_response)
