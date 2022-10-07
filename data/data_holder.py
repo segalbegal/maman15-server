@@ -1,5 +1,5 @@
 class DataHolder:
-    def update_last_seen(self, id) -> None:
+    def update_last_seen(self, id: bytes) -> None:
         raise NotImplementedError()
 
     def user_exists(self, name: str) -> bool:
@@ -8,7 +8,7 @@ class DataHolder:
     def insert_user(self, details: dict) -> None:
         raise NotImplementedError()
 
-    def update_user(self, details: dict) -> None:
+    def update_user_cred(self, details: dict) -> None:
         self.update_last_seen(details['id'])
         raise NotImplementedError()
 

@@ -1,5 +1,3 @@
-from socket import socket
-
 class MessageHandler:
-    def handle_message(self, message: dict, client_sock: socket) -> dict:
+    def handle_message(self, message: dict) -> dict:
         raise NotImplementedError()

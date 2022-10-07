@@ -62,7 +62,7 @@ class SqliteDataHolder(DataHolder):
 
         return clients_dict, files_list
 
-    def update_last_seen(self, id) -> None:
+    def update_last_seen(self, id: bytes) -> None:
         query = f'UPDATE CLIENTS SET LastSeen = datetime() WHERE ID = ?;'
         cur = self.conn.cursor()
         cur.execute(query, (id))
@@ -87,9 +87,18 @@ class SqliteDataHolder(DataHolder):
         self.conn.commit()
         cur.close()
 
+    def update_user_cred(self, details: dict) -> None:
+        parameters = details['public-key'], details['aes-key'], details['id']
+        query = 'UPDATE CLIENTS SET PUBLICKEY = ?, AESKEY = ? WHERE ID = ?'
+
+        cur = self.conn.cursor()
+        cur.execute(query, parameters)
+        self.conn.commit()
+        cur.close()
+
     def insert_file(self, details: dict) -> None:
         parameters = (details['id'], details['file-name'], details['file-path'], details['verified'])
-        query = f'INSERT INTO FILES (ID, FileName, PathName, Verified) VALUES (?, ?, ?, ?);'
+        query = 'INSERT INTO FILES (ID, FileName, PathName, Verified) VALUES (?, ?, ?, ?);'
 
         cur = self.conn.cursor()
         cur.execute(query, parameters)

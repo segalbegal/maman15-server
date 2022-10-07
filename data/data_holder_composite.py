@@ -4,7 +4,7 @@ class DataHolderComposite(DataHolder):
     def __init__(self, holders: list):
         self.holders: list = holders
 
-    def update_last_seen(self, id) -> None:
+    def update_last_seen(self, id: bytes) -> None:
         for holder in self.holders:
             holder.update_last_seen(id)
 
@@ -14,6 +14,10 @@ class DataHolderComposite(DataHolder):
     def insert_user(self, details: dict) -> None:
         for holder in self.holders:
             holder.insert_user(details)
+
+    def update_user_cred(self, details: dict) -> None:
+        for holder in self.holders:
+            holder.update_user_cred(details)
 
     def insert_file(self, details: dict) -> None:
         for holder in self.holders:

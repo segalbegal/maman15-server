@@ -18,7 +18,7 @@ class RAMDataHolder(DataHolder):
         self.clients[details['id']] = details
         self.update_last_seen(details['id'])
 
-    def update_user(self, details: dict) -> None:
+    def update_user_cred(self, details: dict) -> None:
         self.clients[details['id']]['public-key'] = details['public-key']
         self.clients[details['id']]['aes-key'] = details['aes-key']
 

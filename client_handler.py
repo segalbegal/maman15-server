@@ -11,7 +11,7 @@ class ClientHandler:
 
     def handle_client(self, client_sock: socket.socket) -> None:
         parsed_message = self.message_parser.parse_message(client_sock)
-        response = self.message_handler.handle_message(parsed_message, client_sock)
+        response = self.message_handler.handle_message(parsed_message)
         serialized_response = self.response_serializer.serialize_response(response)
 
         print(response)

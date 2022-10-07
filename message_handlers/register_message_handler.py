@@ -1,13 +1,13 @@
-from socket import socket
+from message_handlers.message_handler import MessageHandler
 from data.data_holder import DataHolder
 from constants import REGISTER_SUCC_STATUS, REGISTER_FAIL_STATUS
 import uuid
 
-class RegisterMessageHandler:
+class RegisterMessageHandler(MessageHandler):
     def __init__(self, data: DataHolder):
         self.data: DataHolder = data
 
-    def handle_message(self, message: dict, client_sock: socket) -> dict:
+    def handle_message(self, message: dict) -> dict:
         if self.data.user_exists(message['name']):
             return {'status': REGISTER_FAIL_STATUS}
 
