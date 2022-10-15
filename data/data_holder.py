@@ -9,9 +9,13 @@ class DataHolder:
         raise NotImplementedError()
 
     def update_user_cred(self, details: dict) -> None:
-        self.update_last_seen(details['id'])
         raise NotImplementedError()
 
     def insert_file(self, details: dict) -> None:
-        self.update_last_seen(details['id'])
+        raise NotImplementedError()
+
+    def get_user_name(self, details: dict) -> str:
+        raise NotImplementedError()
+
+    def get_user_aes(self, details: dict) -> bytes:
         raise NotImplementedError()

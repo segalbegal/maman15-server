@@ -22,3 +22,9 @@ class DataHolderComposite(DataHolder):
     def insert_file(self, details: dict) -> None:
         for holder in self.holders:
             holder.insert_file(details)
+
+    def get_user_name(self, details: dict) -> str:
+        return self.holders[0].get_user_name(details)
+
+    def get_user_aes(self, details: dict) -> bytes:
+        return self.holders[0].get_user_aes(details)

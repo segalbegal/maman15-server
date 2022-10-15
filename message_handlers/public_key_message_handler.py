@@ -1,29 +1,25 @@
 from message_handlers.message_handler import MessageHandler
 from data.data_holder import DataHolder
-from Crypto.Cipher import AES, PKCS1_OAEP
-from Crypto.Random import get_random_bytes
-from Crypto.PublicKey import RSA
 from constants import PUBLIC_KEY_STATUS
 
-AES_KEY_LEN = 32
+import utilities.crypto.aes_public_utils as aes
+import utilities.crypto.rsa_public_utils as rsa
 
-def generate_aes_key():
-    key = get_random_bytes(AES_KEY_LEN)
-    return key, AES.new(key, AES.MODE_EAX)
 
 class PublicKeyMessageHandler(MessageHandler):
     def __init__(self, data: DataHolder):
         self.data: DataHolder = data
 
     def handle_message(self, message: dict) -> dict:
-        key, encryptor = generate_aes_key()
-        message['aes-key'] = key
-        self.data.update_user_cred(message)
+        try:
+            key = self.data.get_user_aes(message)
+            message['aes-key'] = key
+        except Exception as e:
+            key, encryptor = aes.generate_key()
+            message['aes-key'] = key
+            self.data.update_user_cred(message)
 
-        pub_key = RSA.importKey(message['public-key'])
-        cipher = PKCS1_OAEP.new(pub_key)
-        encrypted_key = cipher.encrypt(key)
-
+        encrypted_key = rsa.encrypt_pub_key(key, message['public-key'])
         return {
             'status': PUBLIC_KEY_STATUS,
             'name': message['name'],

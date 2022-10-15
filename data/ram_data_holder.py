@@ -24,3 +24,9 @@ class RAMDataHolder(DataHolder):
 
     def insert_file(self, details: dict) -> None:
         self.files.append(details)
+
+    def get_user_name(self, details: dict) -> str:
+        return self.clients[details['id']]['name']
+
+    def get_user_aes(self, details: dict) -> bytes:
+        return self.clients[details['id']]['aes-key']
