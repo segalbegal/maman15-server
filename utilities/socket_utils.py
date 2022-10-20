@@ -23,7 +23,7 @@ class SocketUtils:
 
         return num
 
-    def send_bytes_to_sock(sock: socket, data):
+    def send_bytes_to_sock(sock: socket, data: bytes):
         sock.send(data)
 
     def send_text_to_sock(sock: socket, data: str, encoding: str = 'utf-8'):

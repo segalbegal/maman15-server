@@ -10,7 +10,10 @@ class ResponseSerializerResolver(ResponseSerializer):
 
     def serialize_response(self, response: dict) -> bytes:
         headers = self.headers_serializer.serialize_response(response)
-        payload = self.serializers[response['status']].serialize_response(response)
+        if response['status'] in self.serializers:
+            payload = self.serializers[response['status']].serialize_response(response)
+        else:
+            payload = b''
         headers += bu.write_number_to_buffer(len(payload), PAYLOAD_SIZE_LEN)
         headers += payload
 

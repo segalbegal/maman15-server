@@ -1,6 +1,6 @@
 import socket
 import threading
-from client_handler import ClientHandler
+from client_handlers.client_handler import ClientHandler
 
 class Server:
     def __init__(self, ip: str, port: int, client_handler: ClientHandler) -> None:
