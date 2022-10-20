@@ -14,6 +14,9 @@ class DataHolder:
     def insert_file(self, details: dict) -> None:
         raise NotImplementedError()
 
+    def update_file_verification(self, details: dict) -> None:
+        raise NotImplementedError()
+
     def get_user_name(self, details: dict) -> str:
         raise NotImplementedError()
 

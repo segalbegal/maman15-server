@@ -90,6 +90,11 @@ class SqliteDataHolder(DataHolder):
         query = 'INSERT INTO FILES (ID, FileName, PathName, Verified) VALUES (?, ?, ?, ?);'
         self._execute_query(query, parameters)
 
+    def update_file_verification(self, details: dict) -> None:
+        query = 'UPDATE FILES SET VERIFIED = True WHERE ID = ? AND FILENAME = ?'
+        parameters = (details['id'], details['file-name'])
+        self._execute_query(query, parameters)
+
     def get_user_name(self, details: dict) -> str:
         query = 'SELECT NAME FROM CLIENTS WHERE ID = ?'
         data = self._get_data(query, (details['id'],))

@@ -2,7 +2,7 @@ import datetime
 from data.data_holder import DataHolder
 
 class RAMDataHolder(DataHolder):
-    def __init__(self, clients: dict={}, files: dict={}):
+    def __init__(self, clients: dict={}, files: list={}):
         self.clients: dict = clients
         self.client_names: list = [client['name'] for client in clients.values()]
         self.files: list = files
@@ -24,6 +24,12 @@ class RAMDataHolder(DataHolder):
 
     def insert_file(self, details: dict) -> None:
         self.files.append(details)
+
+    def update_file_verification(self, details: dict) -> None:
+        for file in self.files:
+            if file['id'] == details['id'] and file['file-name'] == details['file-name']:
+                file['verified'] = True
+                return
 
     def get_user_name(self, details: dict) -> str:
         return self.clients[details['id']]['name']

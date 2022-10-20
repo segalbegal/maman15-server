@@ -1,9 +1,12 @@
+from client_handlers.client_handler import ClientHandler
+from client_handlers.client_handler_resolver import ClientHandlerResolver
+from client_handlers.send_file_client_handler import SendFileClientHandler
 from data.ram_data_holder import RAMDataHolder
 from data.sqlite_data_holder import SqliteDataHolder
 from data.data_holder_composite import DataHolderComposite
 
 from server import Server
-from client_handler import ClientHandler
+from client_handlers.regular_client_handler import RegularClientHandler
 # Message parsers
 from message_parsers.register_message_parser import RegisterMessageParser
 from message_parsers.message_parser_resolver import MessageParserResolver
@@ -45,7 +48,7 @@ def create_handler() -> ClientHandler:
     handler = MessageHandlerResolver({
         constants.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
         constants.PUBLIC_KEY_MSGCODE: PublicKeyMessageHandler(data_holder),
-        constants.SEND_FILE_MSGCODE: SendFileMessageHandler(data_holder)
+        constants.SEND_FILE_MSGCODE: SendFileMessageHandler(data_holder),
     })
 
     serializer = ResponseSerializerResolver(HeadersResponseSerializer(), {
@@ -55,7 +58,13 @@ def create_handler() -> ClientHandler:
         constants.SEND_FILE_STATUS: SendFileResponseSerializer(),
     })
 
-    return ClientHandler(parser, handler, serializer)
+    regular_client_handler = RegularClientHandler(parser, handler, serializer)
+    send_file_client_handler = SendFileClientHandler(parser, handler, serializer, data_holder)
+
+    return ClientHandlerResolver(
+        parser,
+        {constants.SEND_FILE_MSGCODE: send_file_client_handler,},
+        regular_client_handler)
 
 def main():
     port = read_listening_port()

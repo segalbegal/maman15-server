@@ -1,6 +1,10 @@
 from data.data_holder import DataHolder
 
 class DataHolderComposite(DataHolder):
+    def update_file_verification(self, details: dict) -> None:
+        for holder in self.holders:
+            holder.update_file_verification(details)
+
     def __init__(self, holders: list):
         self.holders: list = holders
 
