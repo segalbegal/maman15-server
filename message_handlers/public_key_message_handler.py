@@ -1,6 +1,6 @@
 from message_handlers.message_handler import MessageHandler
 from data.data_holder import DataHolder
-from constants import PUBLIC_KEY_STATUS
+from constants.statuses import PUBLIC_KEY_STATUS
 
 import utilities.crypto.aes_public_utils as aes
 import utilities.crypto.rsa_public_utils as rsa

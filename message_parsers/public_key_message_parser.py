@@ -1,7 +1,7 @@
 from socket import socket
 from message_parsers.message_parser import MessageParser
 from utilities.socket_utils import SocketUtils as su
-from constants import NAME_LEN, PUBLIC_KEY_LEN
+from constants.sizes import NAME_LEN, PUBLIC_KEY_LEN
 
 class PublicKeyMessageParser(MessageParser):
     def parse_message(self, client_sock: socket) -> dict:

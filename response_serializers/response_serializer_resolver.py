@@ -1,7 +1,7 @@
 from response_serializers.response_serializer import ResponseSerializer
 from response_serializers.headers_response_serializer import HeadersResponseSerializer
 from utilities.bytes_utils import BytesUtils as bu
-from constants import PAYLOAD_SIZE_LEN
+from constants.sizes import PAYLOAD_SIZE_LEN
 
 class ResponseSerializerResolver(ResponseSerializer):
     def __init__(self, headers_serializer: HeadersResponseSerializer, serializers: dict):

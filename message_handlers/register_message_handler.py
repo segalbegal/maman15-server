@@ -1,6 +1,6 @@
 from message_handlers.message_handler import MessageHandler
 from data.data_holder import DataHolder
-from constants import REGISTER_SUCC_STATUS, REGISTER_FAIL_STATUS
+from constants.statuses import REGISTER_SUCC_STATUS, REGISTER_FAIL_STATUS
 import uuid
 
 class RegisterMessageHandler(MessageHandler):

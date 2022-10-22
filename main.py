@@ -26,7 +26,7 @@ from response_serializers.dummy_response_serializer import DummyResponseSerializ
 from response_serializers.public_key_response_serializer import PublicKeyResponseSerializer
 from response_serializers.send_file_response_serializer import SendFileResponseSerializer
 
-import constants
+from constants import msg_codes, statuses
 
 PORT_FILE = 'port.info'
 LISTENING_IP = '127.0.0.1'
@@ -37,25 +37,25 @@ def read_listening_port() -> int:
 
 def create_handler() -> ClientHandler:
     parser = MessageParserResolver(HeaderMessageParser(), {
-        constants.REGISTER_MSGCODE: RegisterMessageParser(),
-        constants.PUBLIC_KEY_MSGCODE: PublicKeyMessageParser(),
-        constants.SEND_FILE_MSGCODE: SendFileMessageParser(),
+        msg_codes.REGISTER_MSGCODE: RegisterMessageParser(),
+        msg_codes.PUBLIC_KEY_MSGCODE: PublicKeyMessageParser(),
+        msg_codes.SEND_FILE_MSGCODE: SendFileMessageParser(),
     })
 
     sql_data = SqliteDataHolder()
     clients, files = sql_data.fetch_all_data()
     data_holder = DataHolderComposite([RAMDataHolder(clients, files), sql_data])
     handler = MessageHandlerResolver({
-        constants.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
-        constants.PUBLIC_KEY_MSGCODE: PublicKeyMessageHandler(data_holder),
-        constants.SEND_FILE_MSGCODE: SendFileMessageHandler(data_holder),
+        msg_codes.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
+        msg_codes.PUBLIC_KEY_MSGCODE: PublicKeyMessageHandler(data_holder),
+        msg_codes.SEND_FILE_MSGCODE: SendFileMessageHandler(data_holder),
     })
 
     serializer = ResponseSerializerResolver(HeadersResponseSerializer(), {
-        constants.REGISTER_SUCC_STATUS: RegisterResponseSerializer(),
-        constants.REGISTER_FAIL_STATUS: DummyResponseSerialize(),
-        constants.PUBLIC_KEY_STATUS: PublicKeyResponseSerializer(),
-        constants.SEND_FILE_STATUS: SendFileResponseSerializer(),
+        statuses.REGISTER_SUCC_STATUS: RegisterResponseSerializer(),
+        statuses.REGISTER_FAIL_STATUS: DummyResponseSerialize(),
+        statuses.PUBLIC_KEY_STATUS: PublicKeyResponseSerializer(),
+        statuses.SEND_FILE_STATUS: SendFileResponseSerializer(),
     })
 
     regular_client_handler = RegularClientHandler(parser, handler, serializer)
@@ -63,7 +63,7 @@ def create_handler() -> ClientHandler:
 
     return ClientHandlerResolver(
         parser,
-        {constants.SEND_FILE_MSGCODE: send_file_client_handler,},
+        {msg_codes.SEND_FILE_MSGCODE: send_file_client_handler},
         regular_client_handler)
 
 def main():

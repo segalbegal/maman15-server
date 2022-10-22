@@ -1,5 +1,5 @@
 from socket import socket
-from constants import NAME_LEN
+from constants.sizes import NAME_LEN
 from utilities.socket_utils import SocketUtils as su
 from message_parsers.message_parser import MessageParser
 
