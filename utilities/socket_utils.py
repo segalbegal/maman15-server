@@ -17,11 +17,7 @@ class SocketUtils:
 
     def read_number_from_socket(sock: socket, length: int) -> int:
         buffer = SocketUtils.read_bytes_from_socket(sock, length)
-        num: int = 0
-        for i in range(length):
-            num += buffer[length - i - 1] * int(pow(BYTE_BASE, i))
-
-        return num
+        return bu.extract_num_from_buffer(buffer)
 
     def send_bytes_to_sock(sock: socket, data: bytes):
         sock.send(data)

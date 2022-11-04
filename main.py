@@ -7,6 +7,7 @@ from data.data_holder_composite import DataHolderComposite
 
 from server import Server
 from client_handlers.regular_client_handler import RegularClientHandler
+from socket_readers.basic_socket_reader import BasicSocketReader
 # Message parsers
 from message_parsers.register_message_parser import RegisterMessageParser
 from message_parsers.message_parser_resolver import MessageParserResolver
@@ -58,10 +59,12 @@ def create_handler() -> ClientHandler:
         statuses.SEND_FILE_STATUS: SendFileResponseSerializer(),
     })
 
-    regular_client_handler = RegularClientHandler(parser, handler, serializer)
-    send_file_client_handler = SendFileClientHandler(parser, handler, serializer, data_holder)
+    socket_reader = BasicSocketReader()
+    regular_client_handler = RegularClientHandler(socket_reader, parser, handler, serializer)
+    send_file_client_handler = SendFileClientHandler(socket_reader, parser, handler, serializer, data_holder)
 
     return ClientHandlerResolver(
+        socket_reader,
         parser,
         {msg_codes.SEND_FILE_MSGCODE: send_file_client_handler},
         regular_client_handler)
