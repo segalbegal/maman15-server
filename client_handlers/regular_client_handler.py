@@ -6,6 +6,9 @@ from response_serializers.response_serializer import ResponseSerializer
 from socket_readers.socket_reader import SocketReader
 from utilities.socket_utils import SocketUtils as su
 
+import logging
+logger = logging.getLogger()
+
 class RegularClientHandler(ClientHandler):
     def __init__(self, socket_reader: SocketReader, message_parser: MessageParser, message_handler: MessageHandler, response_serializer: ResponseSerializer) -> None:
         self.socket_reader: SocketReader = socket_reader
@@ -18,8 +21,8 @@ class RegularClientHandler(ClientHandler):
             serialized_message = self.socket_reader.read_bytes_from_socket(client_sock)
             parsed_message = self.message_parser.parse_message(serialized_message)
 
-        print('Received message with MessageCode:', parsed_message['msg-code'])
+        logger.debug('Received message with MessageCode: ' + str(parsed_message['msg-code']))
         response = self.message_handler.handle_message(parsed_message)
         serialized_response = self.response_serializer.serialize_response(response)
-        print('Sending message with Status:', response['status'])
+        logger.debug('Sending message with Status: ' + str(response['status']))
         su.send_bytes_to_sock(client_sock, serialized_response)

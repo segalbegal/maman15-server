@@ -69,7 +69,16 @@ def create_handler() -> ClientHandler:
         {msg_codes.SEND_FILE_MSGCODE: send_file_client_handler},
         regular_client_handler)
 
+def init_logging():
+    import logging
+    logging.basicConfig(
+        format='%(asctime)s %(name)s %(levelname)s %(message)s',
+        level='DEBUG',
+    )
+
 def main():
+    init_logging()
+
     port = read_listening_port()
     client_handler: ClientHandler = create_handler()
     server = Server(LISTENING_IP, port, client_handler)

@@ -8,6 +8,9 @@ from socket_readers.socket_reader import SocketReader
 from utilities.socket_utils import SocketUtils as su
 from constants import statuses, system_constants, msg_codes
 
+import logging
+logger = logging.getLogger()
+
 class SendFileClientHandler(ClientHandler):
     def __init__(self,
                  reader: SocketReader,
@@ -26,9 +29,9 @@ class SendFileClientHandler(ClientHandler):
         return self.message_parser.parse_message(serialized_message)
 
     def __process_request(self, message: dict, sock: socket.socket):
-        print('Received message with MessageCode:', message['msg-code'])
+        logger.debug('Received message with MessageCode: ' + str(message['msg-code']))
         response = self.message_handler.handle_message(message)
-        print('Sending message with Status:', response['status'])
+        logger.debug('Sending message with Status: ' + str(response['status']))
         serialized_response = self.response_serializer.serialize_response(response)
         su.send_bytes_to_sock(sock, serialized_response)
 
@@ -56,7 +59,7 @@ class SendFileClientHandler(ClientHandler):
                 self.__process_request(parsed_message, client_sock)
 
         if ack['msg-code'] == msg_codes.INVALID_CRC_MSGCODE:
-            print('Error while comparing CRC with client!')
+            logger.error('Error while comparing CRC with client!')
         else:
             parsed_message['verified'] = True
             self.data.update_file_verification(parsed_message)
