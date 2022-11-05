@@ -2,7 +2,8 @@ from message_handlers.message_handler import MessageHandler
 import utilities.crypto.aes_public_utils as aes
 from data.data_holder import DataHolder
 from utilities.cksum_utils import calculate_crc32
-from constants import SEND_FILE_STATUS, VERSION
+from constants.statuses import SEND_FILE_STATUS
+from constants.system_constants import VERSION
 
 FILE_PATH = '/files/'
 

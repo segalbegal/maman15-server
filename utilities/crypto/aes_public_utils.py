@@ -1,6 +1,6 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-from constants import AES_KEY_LEN
+from constants.sizes import AES_KEY_LEN
 
 IV_BLOCK_LEN = 16
 IV_BLOCK_VALUE = 0
