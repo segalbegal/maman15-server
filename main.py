@@ -1,6 +1,4 @@
 from client_handlers.client_handler import ClientHandler
-from client_handlers.client_handler_resolver import ClientHandlerResolver
-from client_handlers.send_file_client_handler import SendFileClientHandler
 from data.ram_data_holder import RAMDataHolder
 from data.sqlite_data_holder import SqliteDataHolder
 from data.data_holder_composite import DataHolderComposite
@@ -13,11 +11,14 @@ from message_parsers.register_message_parser import RegisterMessageParser
 from message_parsers.message_parser_resolver import MessageParserResolver
 from message_parsers.headers_message_parser import HeaderMessageParser
 from message_parsers.public_key_message_parser import PublicKeyMessageParser
+from message_parsers.crc_message_parser import CRCMessageParser
 from message_parsers.send_file_message_parser import SendFileMessageParser
 # Message handlers
 from message_handlers.register_message_handler import RegisterMessageHandler
 from message_handlers.message_handler_resolver import MessageHandlerResolver
 from message_handlers.public_key_message_handler import PublicKeyMessageHandler
+from message_handlers.dummy_message_handler import DummyMessageHandler
+from message_handlers.valid_crc_message_handler import ValidCrcMessageHandler
 from message_handlers.send_file_message_handler import SendFileMessageHandler
 # Response serializers
 from response_serializers.register_response_serializer import RegisterResponseSerializer
@@ -41,6 +42,7 @@ def create_handler() -> ClientHandler:
         msg_codes.REGISTER_MSGCODE: RegisterMessageParser(),
         msg_codes.PUBLIC_KEY_MSGCODE: PublicKeyMessageParser(),
         msg_codes.SEND_FILE_MSGCODE: SendFileMessageParser(),
+        msg_codes.VALID_CRC_MSGCODE: CRCMessageParser(),
     })
 
     sql_data = SqliteDataHolder()
@@ -50,7 +52,8 @@ def create_handler() -> ClientHandler:
         msg_codes.REGISTER_MSGCODE: RegisterMessageHandler(data_holder),
         msg_codes.PUBLIC_KEY_MSGCODE: PublicKeyMessageHandler(data_holder),
         msg_codes.SEND_FILE_MSGCODE: SendFileMessageHandler(data_holder),
-    })
+        msg_codes.VALID_CRC_MSGCODE: ValidCrcMessageHandler(data_holder),
+    }, DummyMessageHandler())
 
     serializer = ResponseSerializerResolver(HeadersResponseSerializer(), {
         statuses.REGISTER_SUCC_STATUS: RegisterResponseSerializer(),
@@ -61,13 +64,8 @@ def create_handler() -> ClientHandler:
 
     socket_reader = BasicSocketReader()
     regular_client_handler = RegularClientHandler(socket_reader, parser, handler, serializer)
-    send_file_client_handler = SendFileClientHandler(socket_reader, parser, handler, serializer, data_holder)
 
-    return ClientHandlerResolver(
-        socket_reader,
-        parser,
-        {msg_codes.SEND_FILE_MSGCODE: send_file_client_handler},
-        regular_client_handler)
+    return regular_client_handler
 
 def init_logging():
     import logging
